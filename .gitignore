@@ -1,0 +1,14 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Scrapy stuff:
+.scrapy
+
+# Logs
+releases.log
+
+# Local builds
+releases.json
+releases.rss

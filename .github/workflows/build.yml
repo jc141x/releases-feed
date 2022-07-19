@@ -1,0 +1,73 @@
+name: Scrape Releases
+
+on:
+  push:
+    branches:
+      - master
+  schedule:
+    - cron: "0 */3 * * *"
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛒 Checkout the repo
+        uses: actions/checkout@v3
+
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+          cache: 'pip'
+      - run: pip install -r requirements.txt
+
+      - name: 🕸️ Run crawler
+        env:
+          PROXY_URL_FOR_1337X: ${{ secrets.PROXY_URL_FOR_1337X }}
+        run: |
+            scrapy crawl releases --logfile=releases.log
+            sed -i 's/${{ secrets.PROXY_URL_FOR_1337X }}/PROXY_URL_FOR_1337X/g' releases.log
+        shell: bash
+
+      - name: 🗒️ Upload log
+        uses: actions/upload-artifact@v3
+        with:
+          name: releases.log
+          path: ${{ github.workspace }}/releases.log
+
+      - name: ✅ Validate stuff
+        run: |
+            [ -s "${{ github.workspace }}/releases.json" ] && echo "🎉 Releases JSON generated successfully!" || exit 1
+            [ -s "${{ github.workspace }}/releases.csv" ] && echo "🎉 Releases CSV generated successfully!" || exit 1
+            [ -s "${{ github.workspace }}/releases.rss" ] && echo "🎉 RSS Feed generated successfully!" || exit 1
+        shell: bash
+
+      - name: 🚮 Delete older releases
+        uses: dev-drprasad/delete-older-releases@v0.2.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          keep_latest: 0
+          delete_tags: true
+
+      - name: 🛠️ Generate stats
+        id: utils
+        run: |
+          # Date
+          echo "::set-output name=date::$(date -u "+%Y%m%d%H%M%S")"
+          # Number of releases
+          echo "::set-output name=releases::$(jq length "${{ github.workspace }}/releases.json")"
+        shell: bash
+
+      - name: 🚀 Upload new release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: feeds
+          name: ${{ steps.utils.outputs.date }}
+          body: Number of releases - ${{ steps.utils.outputs.releases }}
+          files: |
+            ${{ github.workspace }}/releases.json
+            ${{ github.workspace }}/releases.csv
+            ${{ github.workspace }}/releases.rss
+          draft: false
+          prerelease: false
