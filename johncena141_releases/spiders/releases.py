@@ -8,21 +8,6 @@ releases_domain = "1337x.to"
 uploader_username = "johncena141"
 
 
-def process_description(desc):
-    x = desc.replace('src="/images/profile-load.svg" ', "")
-    x = x.replace("data-original=", "src=")
-    x = x.replace(' class="img-responsive descrimg lazy"', "")
-    return x
-
-
-def process_date(date):
-    x = dateparser.parse(
-        date, settings={"TO_TIMEZONE": "UTC", "RETURN_AS_TIMEZONE_AWARE": True}
-    )
-    x = x.strftime("%a, %d %b %Y %H:%M:%S %z")
-    return x
-
-
 class ReleasesSpider(scrapy.Spider):
     name = "releases"
     allowed_domains = [f"{proxy_domain}"]
@@ -46,7 +31,21 @@ class ReleasesSpider(scrapy.Spider):
             yield response.follow(item, callback=self.parse_torrent)
 
     def parse_torrent(self, response):
+        def process_description(desc):
+            x = desc.replace('src="/images/profile-load.svg" ', "")
+            x = x.replace("data-original=", "src=")
+            x = x.replace(' class="img-responsive descrimg lazy"', "")
+            return x
+
+        def process_date(date):
+            x = dateparser.parse(
+                date, settings={"TO_TIMEZONE": "UTC", "RETURN_AS_TIMEZONE_AWARE": True}
+            )
+            x = x.strftime("%a, %d %b %Y %H:%M:%S %z")
+            return x
+
         entry = {
+            "id": response.url.split("/")[-3],
             "name": (
                 re.search(
                     "Download (.+?) Torrent | 1337x",

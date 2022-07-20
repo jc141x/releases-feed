@@ -20,7 +20,7 @@ NEWSPIDER_MODULE = "johncena141_releases.spiders"
 ROBOTSTXT_OBEY = True
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-CONCURRENT_REQUESTS = 1
+# CONCURRENT_REQUESTS = 32
 
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
@@ -74,12 +74,32 @@ FEEDS = {
     "releases.json": {
         "format": "json",
         "encoding": "utf8",
-        "fields": ["name", "url", "magnet", "date", "size", "seeds", "leeches", "hash"],
+        "fields": [
+            "id",
+            "name",
+            "url",
+            "magnet",
+            "date",
+            "size",
+            "seeds",
+            "leeches",
+            "hash",
+        ],
     },
     "releases.csv": {
         "format": "csv",
         "encoding": "utf8",
-        "fields": ["name", "url", "magnet", "date", "size", "seeds", "leeches", "hash"],
+        "fields": [
+            "id",
+            "name",
+            "url",
+            "magnet",
+            "date",
+            "size",
+            "seeds",
+            "leeches",
+            "hash",
+        ],
     },
     "releases.rss": {"format": "rss", "encoding": "utf8"},
 }
@@ -87,7 +107,7 @@ FEEDS = {
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
-# AUTOTHROTTLE_ENABLED = True
+AUTOTHROTTLE_ENABLED = True
 # The initial download delay
 # AUTOTHROTTLE_START_DELAY = 5
 # The maximum download delay to be set in case of high latencies

@@ -5,7 +5,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: "0 */3 * * *"
+    - cron: "0 */6 * * *"
 
 jobs:
   scrape:
@@ -25,7 +25,7 @@ jobs:
         env:
           PROXY_URL_FOR_1337X: ${{ secrets.PROXY_URL_FOR_1337X }}
         run: |
-            scrapy crawl releases --logfile=releases.log
+            time scrapy crawl releases --logfile=releases.log
             sed -i 's/${{ secrets.PROXY_URL_FOR_1337X }}/PROXY_URL_FOR_1337X/g' releases.log
         shell: bash
 

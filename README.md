@@ -8,6 +8,6 @@
 
 ## Details
 
-* an Actions cronjob will run the script and upload the feeds to the "Releases" every 3 hours.
+* an Actions cronjob will run the script and upload the feeds to the "Releases" every 6 hours.
 
 * In case 1337x.to goes down or scraping fails, you can check the latest "Release" for working files.
