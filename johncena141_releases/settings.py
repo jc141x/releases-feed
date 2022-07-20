@@ -20,7 +20,7 @@ NEWSPIDER_MODULE = "johncena141_releases.spiders"
 ROBOTSTXT_OBEY = True
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-# CONCURRENT_REQUESTS = 32
+CONCURRENT_REQUESTS = 1
 
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
@@ -71,8 +71,16 @@ FEED_EXPORTERS = {
 }
 
 FEEDS = {
-    "releases.json": {"format": "json", "encoding": "utf8"},
-    "releases.csv": {"format": "csv", "encoding": "utf8"},
+    "releases.json": {
+        "format": "json",
+        "encoding": "utf8",
+        "fields": ["name", "url", "magnet", "date", "size", "seeds", "leeches", "hash"],
+    },
+    "releases.csv": {
+        "format": "csv",
+        "encoding": "utf8",
+        "fields": ["name", "url", "magnet", "date", "size", "seeds", "leeches", "hash"],
+    },
     "releases.rss": {"format": "rss", "encoding": "utf8"},
 }
 

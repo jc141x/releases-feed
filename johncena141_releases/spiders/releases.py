@@ -8,6 +8,21 @@ releases_domain = "1337x.to"
 uploader_username = "johncena141"
 
 
+def process_description(desc):
+    x = desc.replace('src="/images/profile-load.svg" ', "")
+    x = x.replace("data-original=", "src=")
+    x = x.replace(' class="img-responsive descrimg lazy"', "")
+    return x
+
+
+def process_date(date):
+    x = dateparser.parse(
+        date, settings={"TO_TIMEZONE": "UTC", "RETURN_AS_TIMEZONE_AWARE": True}
+    )
+    x = x.strftime("%a, %d %b %Y %H:%M:%S %z")
+    return x
+
+
 class ReleasesSpider(scrapy.Spider):
     name = "releases"
     allowed_domains = [f"{proxy_domain}"]
@@ -19,7 +34,10 @@ class ReleasesSpider(scrapy.Spider):
             response.css(".last > a:nth-child(1)::attr(href)").get().split("/")[-2]
         )
         while self.current_page <= last_page:
-            yield response.follow(f"/{uploader_username}-torrents/{self.current_page + 1}/", callback=self.parse_list)
+            yield response.follow(
+                f"/{uploader_username}-torrents/{self.current_page + 1}/",
+                callback=self.parse_list,
+            )
 
     def parse_list(self, response):
         self.current_page = int(response.url.split("/")[-2])
@@ -37,12 +55,11 @@ class ReleasesSpider(scrapy.Spider):
             ).strip(),
             "seeds": response.css(".seeds::text").get(),
             "leeches": response.css(".leeches::text").get(),
-            "date": dateparser.parse(
+            "date": process_date(
                 response.css(
                     "ul.list:nth-child(3) > li:nth-child(3) > span:nth-child(2)::text"
-                ).get(),
-                settings={"TO_TIMEZONE": "UTC", "RETURN_AS_TIMEZONE_AWARE": True},
-            ).strftime("%a, %d %b %Y %H:%M:%S %z"),
+                ).get()
+            ),
             "size": response.css(
                 ".no-top-radius > .clearfix > ul:nth-child(2) > li:nth-child(4) > span:nth-child(2)::text"
             ).get(),
@@ -51,6 +68,6 @@ class ReleasesSpider(scrapy.Spider):
                 ".dropdown-menu li:nth-child(4) a::attr(href)"
             ).get(),
             "hash": response.css(".infohash-box p span::text").get(),
-            "description": response.css("#description").get()
+            "description": process_description(response.css("#description").get()),
         }
         yield entry
