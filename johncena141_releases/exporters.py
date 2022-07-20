@@ -47,11 +47,7 @@ class Johncena141ReleasesRSSExporter(XmlItemExporter):
         self._export_xml_field("title", item.get("name"), depth=3)
         self._export_xml_field("link", item.get("magnet"), depth=3)
         self._export_xml_field("pubDate", item.get("date"), depth=3)
-        self._export_xml_field(
-            "description",
-            f"Size: {item.get('size')}<br>Seeds: {item.get('seeds')}<br>Leeches: {item.get('leeches')}<br>Screenshots/Info: <a href='{item.get('url')}'>click here</a>",
-            depth=3,
-        )
+        self._export_xml_field("description", item.get("description"), depth=3)
 
         self._beautify_indent(depth=2)
         self.xg.endElement(self.item_element)

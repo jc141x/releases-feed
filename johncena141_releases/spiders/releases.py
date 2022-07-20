@@ -11,7 +11,7 @@ uploader_username = "johncena141"
 class ReleasesSpider(scrapy.Spider):
     name = "releases"
     allowed_domains = [f"{proxy_domain}"]
-    start_urls = [f"https://{proxy_domain}/{uploader_username}-torrents/1/"]
+    start_urls = [f"https://{proxy_domain}/user/{uploader_username}/"]
     current_page = 0
 
     def parse(self, response):
@@ -23,15 +23,16 @@ class ReleasesSpider(scrapy.Spider):
 
     def parse_list(self, response):
         self.current_page = int(response.url.split("/")[-2])
-        for item in reversed(response.css("td.coll-1.name a:nth-child(2)::attr(href)").getall()):
-            yield scrapy.Request(response.urljoin(item), callback=self.parse_torrent)
+        torrents = response.css("td.coll-1.name a:nth-child(2)::attr(href)").getall()
+        for item in reversed(torrents):
+            yield response.follow(item, callback=self.parse_torrent)
 
     def parse_torrent(self, response):
         entry = {
             "name": (
                 re.search(
                     "Download (.+?) Torrent | 1337x",
-                    response.css("head > title::text").get(),
+                    response.css("title::text").get(),
                 ).group(1)
             ).strip(),
             "seeds": response.css(".seeds::text").get(),
@@ -50,5 +51,6 @@ class ReleasesSpider(scrapy.Spider):
                 ".dropdown-menu li:nth-child(4) a::attr(href)"
             ).get(),
             "hash": response.css(".infohash-box p span::text").get(),
+            "description": response.css("#description").get()
         }
         yield entry
