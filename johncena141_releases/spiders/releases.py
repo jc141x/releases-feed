@@ -12,23 +12,19 @@ class ReleasesSpider(scrapy.Spider):
     name = "releases"
     allowed_domains = [f"{proxy_domain}"]
     start_urls = [f"https://{proxy_domain}/{uploader_username}-torrents/1/"]
-    scrape_pages = []
+    current_page = 0
 
     def parse(self, response):
-        last_page = (
+        last_page = int(
             response.css(".last > a:nth-child(1)::attr(href)").get().split("/")[-2]
         )
-        self.scrape_pages = [
-            f"https://{proxy_domain}/{uploader_username}-torrents/{i}/"
-            for i in range(1, int(last_page) + 1)
-        ]
-        for url in self.scrape_pages:
-            yield scrapy.Request(url=url, callback=self.parse_list)
+        while self.current_page <= last_page:
+            yield response.follow(f"/{uploader_username}-torrents/{self.current_page + 1}/", callback=self.parse_list)
 
     def parse_list(self, response):
-        for item in response.css("td.coll-1.name a:nth-child(2)"):
-            torrent_url = f"https://{proxy_domain}{item.css('a::attr(href)').get()}"
-            yield scrapy.Request(torrent_url, callback=self.parse_torrent)
+        self.current_page = int(response.url.split("/")[-2])
+        for item in reversed(response.css("td.coll-1.name a:nth-child(2)::attr(href)").getall()):
+            yield scrapy.Request(response.urljoin(item), callback=self.parse_torrent)
 
     def parse_torrent(self, response):
         entry = {

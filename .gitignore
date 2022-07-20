@@ -10,5 +10,6 @@ __pycache__/
 releases.log
 
 # Local builds
+releases.csv
 releases.json
 releases.rss
