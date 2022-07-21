@@ -8,7 +8,7 @@
 
 ## Details
 
-* an Actions cronjob will run the script and upload the feeds to the ["Releases"](https://github.com/jc141x/releases-feed/releases/latest) every 6 hours.
+* an Actions cronjob will run the script and upload the feeds to the ["Releases"](https://github.com/jc141x/releases-feed/releases/latest) every 4 hours.
 
 * In case 1337x.to goes down or scraping fails, you can check the latest ["Releases"](https://github.com/jc141x/releases-feed/releases/latest) for working files.
 
