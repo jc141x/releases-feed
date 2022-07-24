@@ -12,9 +12,15 @@ BOT_NAME = "johncena141_releases"
 SPIDER_MODULES = ["johncena141_releases.spiders"]
 NEWSPIDER_MODULE = "johncena141_releases.spiders"
 
+# Enable fake user agent provider
+FAKEUSERAGENT_PROVIDERS = [
+    'scrapy_fake_useragent.providers.FakeUserAgentProvider',  # this is the first provider we'll try
+    'scrapy_fake_useragent.providers.FakerProvider',  # if FakeUserAgentProvider fails, we'll use faker to generate a user-agent string for us
+    'scrapy_fake_useragent.providers.FixedUserAgentProvider',  # fall back to USER_AGENT value
+]
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-# USER_AGENT = 'johncena141_releases (+http://www.yourdomain.com)'
+USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64)'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True

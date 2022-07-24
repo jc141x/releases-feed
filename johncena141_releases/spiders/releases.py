@@ -1,17 +1,14 @@
 import dateparser
 import re
 import scrapy
-import os
 
-proxy_domain = os.environ["PROXY_URL_FOR_1337X"]
-releases_domain = "1337x.to"
 uploader_username = "johncena141"
 
 
 class ReleasesSpider(scrapy.Spider):
     name = "releases"
-    allowed_domains = [f"{proxy_domain}"]
-    start_urls = [f"https://{proxy_domain}/user/{uploader_username}/"]
+    allowed_domains = ["1337x.to"]
+    start_urls = [f"https://1337x.to/user/{uploader_username}/"]
     current_page = 0
 
     def parse(self, response):
@@ -62,7 +59,7 @@ class ReleasesSpider(scrapy.Spider):
             "size": response.css(
                 ".no-top-radius > .clearfix > ul:nth-child(2) > li:nth-child(4) > span:nth-child(2)::text"
             ).get(),
-            "url": response.url.replace(proxy_domain, releases_domain),
+            "url": response.url,
             "magnet": response.css(
                 ".dropdown-menu li:nth-child(4) a::attr(href)"
             ).get(),

@@ -21,19 +21,29 @@ jobs:
           cache: 'pip'
       - run: pip install -r requirements.txt
 
-      - name: 🕸️ Run crawler
-        env:
-          PROXY_URL_FOR_1337X: ${{ secrets.PROXY_URL_FOR_1337X }}
+      - name: 🌐 Setup and Run Mullvad VPN
         run: |
-            time scrapy crawl releases --logfile=releases.log
-            sed -i 's/${{ secrets.PROXY_URL_FOR_1337X }}/PROXY_URL_FOR_1337X/g' releases.log
+          # Install
+          aria2c --content-disposition-default-utf8=true "https://mullvad.net/download/app/deb/latest" --out="mullvad.deb"
+          sudo apt install -y mullvad.deb
+
+          # Login
+          mullvad account set ${{ secrets.MULLVAD_ACCOUNT }}
+
+          # Set best server
+          architecture="Linux_x86_64"
+          URL="$(curl -s https://api.github.com/repos/bastiandoetsch/mullvad-best-server/releases/latest | jq -r ".assets[] | select(.name | test(\"${architecture}\")) | .browser_download_url")"
+          aria2c "$URL" --out="mullvad-best-server" && chmod +x mullvad-best-server
+          mullvad relay set hostname "$(./mullvad-best-server -t "wireguard" -c "${{ secrets.MULLVAD_COUNTRYCODE }}" -o json | jq -r .hostname)"
+
+          # Start
+          mullvad connect
         shell: bash
 
-      - name: 🗒️ Upload log
-        uses: actions/upload-artifact@v3
-        with:
-          name: releases.log
-          path: ${{ github.workspace }}/releases.log
+      - name: 🕸️ Run crawler
+        run: |
+            scrapy crawl releases
+        shell: bash
 
       - name: ✅ Validate stuff
         run: |

@@ -1,2 +1,3 @@
 scrapy
+scrapy-fake-useragent
 dateparser
