@@ -26,7 +26,7 @@ jobs:
         run: |
           # Install
           aria2c --content-disposition-default-utf8=true "https://mullvad.net/download/app/deb/latest" --out="mullvad.deb"
-          sudo apt install -y mullvad.deb
+          sudo apt install -y ./mullvad.deb
 
           # Login
           mullvad account set ${{ secrets.MULLVAD_ACCOUNT }}
