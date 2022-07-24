@@ -7,8 +7,8 @@ uploader_username = "johncena141"
 
 class ReleasesSpider(scrapy.Spider):
     name = "releases"
-    allowed_domains = ["1337x.to"]
-    start_urls = [f"https://1337x.to/user/{uploader_username}/"]
+    allowed_domains = ["1337x.unblockninja.com"]
+    start_urls = [f"https://1337x.unblockninja.com/user/{uploader_username}/"]
     current_page = 0
 
     def parse(self, response):
@@ -59,7 +59,7 @@ class ReleasesSpider(scrapy.Spider):
             "size": response.css(
                 ".no-top-radius > .clearfix > ul:nth-child(2) > li:nth-child(4) > span:nth-child(2)::text"
             ).get(),
-            "url": response.url,
+            "url": response.url.replace(response.url.split('/')[-5], '1337x.to'),
             "magnet": response.css(
                 ".dropdown-menu li:nth-child(4) a::attr(href)"
             ).get(),

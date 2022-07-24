@@ -22,31 +22,9 @@ jobs:
           cache: 'pip'
       - run: pip install -r requirements.txt
 
-      - name: 🌐 Setup and Run Mullvad VPN
-        run: |
-          # Install
-          aria2c --content-disposition-default-utf8=true "https://mullvad.net/download/app/deb/latest" --out="mullvad.deb"
-          sudo apt install -y ./mullvad.deb
-
-          # Login
-          mullvad account login "${{ secrets.MULLVAD_ACCOUNT }}"
-
-          # Set best server
-          architecture="Linux_x86_64"
-          URL="$(curl -s https://api.github.com/repos/bastiandoetsch/mullvad-best-server/releases/latest | jq -r ".assets[] | select(.name | test(\"${architecture}\")) | .browser_download_url")"
-          aria2c "$URL" --out="mullvad-best-server" && chmod +x mullvad-best-server
-          mullvad relay set hostname "$(./mullvad-best-server -t "wireguard" -c "${{ secrets.MULLVAD_COUNTRYCODE }}" -l debug -o json | jq -r .hostname)"
-
-          # Start
-          echo "Connecting to VPN"; mullvad connect
-        shell: bash
-
       - name: 🕸️ Run crawler
         run: |
             scrapy crawl releases --logfile=releases.log
-            
-            # Logout of VPN
-            mullvad disconnect; mullvad account logout
         shell: bash
 
       - name: 🗒️ Upload log
