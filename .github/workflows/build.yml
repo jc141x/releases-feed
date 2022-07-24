@@ -38,15 +38,22 @@ jobs:
           mullvad relay set hostname "$(./mullvad-best-server -t "wireguard" -c "${{ secrets.MULLVAD_COUNTRYCODE }}" -l debug -o json | jq -r .hostname)"
 
           # Start
-          echo "Connecting to VPN"
-          mullvad connect
+          echo "Connecting to VPN"; mullvad connect
         shell: bash
 
       - name: 🕸️ Run crawler
         run: |
-            scrapy crawl releases
-            mullvad disconnect
+            scrapy crawl releases --logfile=releases.log
+            
+            # Logout of VPN
+            mullvad disconnect; mullvad account logout
         shell: bash
+
+      - name: 🗒️ Upload log
+        uses: actions/upload-artifact@v3
+        with:
+          name: releases.log
+          path: ${{ github.workspace }}/releases.log
 
       - name: ✅ Validate stuff
         run: |
