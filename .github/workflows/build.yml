@@ -35,15 +35,17 @@ jobs:
           architecture="Linux_x86_64"
           URL="$(curl -s https://api.github.com/repos/bastiandoetsch/mullvad-best-server/releases/latest | jq -r ".assets[] | select(.name | test(\"${architecture}\")) | .browser_download_url")"
           aria2c "$URL" --out="mullvad-best-server" && chmod +x mullvad-best-server
-          mullvad relay set hostname "$(./mullvad-best-server -t "wireguard" -c "${{ secrets.MULLVAD_COUNTRYCODE }}" -o json | jq -r .hostname)"
+          mullvad relay set hostname "$(./mullvad-best-server -t "wireguard" -c "${{ secrets.MULLVAD_COUNTRYCODE }}" -l debug -o json | jq -r .hostname)"
 
           # Start
+          echo "Connecting to VPN"
           mullvad connect
         shell: bash
 
       - name: 🕸️ Run crawler
         run: |
             scrapy crawl releases
+            mullvad disconnect
         shell: bash
 
       - name: ✅ Validate stuff
