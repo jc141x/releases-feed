@@ -45,7 +45,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          keep_latest: 0
+          keep_latest: 3
           delete_tags: true
 
       - name: 🛠️ Generate stats
