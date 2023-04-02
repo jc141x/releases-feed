@@ -18,6 +18,10 @@
 * In case 1337x.to goes down or scraping fails, you can check the latest ["Releases"](https://github.com/jc141x/releases-feed/releases/latest) for working files.
 
 ## Links
+* RSS feed: (add this one to RSS clients)
+```
+https://github.com/jc141x/releases-feed/releases/download/feeds/releases.rss
+```
 * JSON:
 ```
 https://github.com/jc141x/releases-feed/releases/download/feeds/releases.json
@@ -25,8 +29,4 @@ https://github.com/jc141x/releases-feed/releases/download/feeds/releases.json
 * CSV:
 ```
 https://github.com/jc141x/releases-feed/releases/download/feeds/releases.csv
-```
-* RSS feed:
-```
-https://github.com/jc141x/releases-feed/releases/download/feeds/releases.rss
 ```
