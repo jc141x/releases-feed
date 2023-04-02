@@ -5,8 +5,9 @@
 <p align="center">
   All our releases scraped into various machine readable files (CSV, JSON, RSS)
 </p>
+<br>
 
-Recommended RSS client: [Raven Reader](https://github.com/hello-efficiency-inc/raven-reader)
+### Recommended RSS client: [Raven Reader](https://github.com/hello-efficiency-inc/raven-reader)
 
 ## Details
 
