@@ -2,11 +2,11 @@
   <h1>Releases</h1>
 </div>
 
-Recommended RSS client: [Raven Reader](https://github.com/hello-efficiency-inc/raven-reader)
-
 <p align="center">
   All our releases scraped into various machine readable files (CSV, JSON, RSS)
 </p>
+
+Recommended RSS client: [Raven Reader](https://github.com/hello-efficiency-inc/raven-reader)
 
 ## Details
 
