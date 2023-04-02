@@ -9,6 +9,8 @@
 
 ### Recommended RSS client: [Raven Reader](https://github.com/hello-efficiency-inc/raven-reader)
 
+ - The open externally button adds the torrents to your torrent client.
+
 ## Details
 
 * an Actions cronjob will run the script and upload the feeds to the ["Releases"](https://github.com/jc141x/releases-feed/releases/latest) every 4 hours.
