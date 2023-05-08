@@ -7,7 +7,7 @@
 </p>
 <br>
 
-### Recommended RSS client: [Fluent Reader]([https://github.com/hello-efficiency-inc/raven-reader](https://github.com/yang991178/fluent-reader))
+### Recommended RSS client: [Fluent Reader](https://github.com/yang991178/fluent-reader)
 
  - The open externally button adds the torrents to your torrent client.
 
