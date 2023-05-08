@@ -7,9 +7,15 @@
 </p>
 <br>
 
-### Recommended RSS client: [Raven Reader](https://github.com/hello-efficiency-inc/raven-reader)
+### Recommended RSS client: [Fluent Reader]([https://github.com/hello-efficiency-inc/raven-reader](https://github.com/yang991178/fluent-reader))
 
  - The open externally button adds the torrents to your torrent client.
+
+#### Keeping the reader up to date.
+
+Previously we recommended Raven Reader but found out that it caches old articles/torrents and shows them without any mention that it does not match the current RSS listing anymore. This is not acceptable to our unique torrent per game practice which ensures a focus on quality.
+
+Fluent Reader is a bit better by providing the user the option to clean up old articles and delete cache in preferences. This enables users to use the search feature without finding duplicates. This action needs to be done manually so not quite ideal. We are looking for readers that handle this kind of requirements better.
 
 ## Links
 * RSS feed: (add this one to RSS clients)
