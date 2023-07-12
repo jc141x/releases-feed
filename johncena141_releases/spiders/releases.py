@@ -7,8 +7,8 @@ uploader_username = "johncena141"
 
 class ReleasesSpider(scrapy.Spider):
     name = "releases"
-    allowed_domains = ["1337x.unblockninja.com"]
-    start_urls = [f"https://1337x.unblockninja.com/user/{uploader_username}/"]
+    allowed_domains = ["https://1337x.proxyninja.org"]
+    start_urls = [f"https://1337x.proxyninja.org/user/{uploader_username}/"]
     current_page = 0
 
     def parse(self, response):
