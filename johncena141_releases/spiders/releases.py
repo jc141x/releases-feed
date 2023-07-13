@@ -7,7 +7,7 @@ uploader_username = "johncena141"
 
 class ReleasesSpider(scrapy.Spider):
     name = "releases"
-    allowed_domains = ["https://1337x.proxyninja.org"]
+    allowed_domains = ["1337x.proxyninja.org"]
     start_urls = [f"https://1337x.proxyninja.org/user/{uploader_username}/"]
     current_page = 0
 
