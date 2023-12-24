@@ -7,8 +7,8 @@ uploader_username = "johncena141"
 
 class ReleasesSpider(scrapy.Spider):
     name = "releases"
-    allowed_domains = ["1337x.torrentsbay.org"]
-    start_urls = [f"https://1337x.torrentsbay.org/user/{uploader_username}/"]
+    allowed_domains = ["1337x.unblockit.ing"]
+    start_urls = [f"https://1337x.unblockit.ing/user/{uploader_username}/"]
     current_page = 0
 
     def parse(self, response):
