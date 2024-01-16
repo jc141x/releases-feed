@@ -68,9 +68,9 @@ TELNETCONSOLE_ENABLED = False
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-# ITEM_PIPELINES = {
-#    'johncena141_releases.pipelines.Johncena141ReleasesPipeline': 300,
-# }
+ITEM_PIPELINES = {
+   'johncena141_releases.pipelines.Johncena141ReleasesPipeline': 300,
+}
 
 FEED_EXPORTERS = {
     "rss": "johncena141_releases.exporters.Johncena141ReleasesRSSExporter"
