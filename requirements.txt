@@ -1,3 +1,7 @@
 scrapy
 scrapy-fake-useragent
 dateparser
+
+# Tor Proxy
+pproxy
+python-daemon

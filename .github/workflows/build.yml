@@ -22,6 +22,17 @@ jobs:
           cache: 'pip'
       - run: pip install -r requirements.txt
 
+      - name: 🔧 Setup TOR
+        uses: tor-actions/setup-tor@main
+        with:
+          stable: true
+          daemon: true
+
+      - name: 🤿 Start TOR Proxy
+        run: |
+            pproxy -r 'socks5://127.0.0.1:9050' -l http://127.0.0.1:9051 --daemon || exit 1
+        shell: bash
+
       - name: 🕸️ Run crawler
         run: |
             scrapy crawl releases --logfile=releases.log
