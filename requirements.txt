@@ -2,6 +2,9 @@
 scrapy
 dateparser
 
+# HTML minifier
+minify-html-onepass
+
 # Tor Proxy
 pproxy
 python-daemon

@@ -19,6 +19,9 @@ class ReleasesSpider(scrapy.Spider):
             response.css(".last > a:nth-child(1)::attr(href)").get().split("/")[-2]
         )
 
+        # HACK: Manually set total page number, for dev
+        # last_page = 1
+
         while self.current_page <= last_page:
             yield response.follow(
                 f"/{uploader_username}-torrents/{self.current_page}/",

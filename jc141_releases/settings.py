@@ -69,24 +69,10 @@ ITEM_PIPELINES = {
 
 FEED_EXPORTERS = {"rss": "jc141_releases.exporters.Jc141ReleasesRSSExporter"}
 
-# Default set of fields for the feeds
-_FEED_FIELDS = [
-    "torrent_id",
-    "name",
-    "url",
-    "upload_date",
-    "checked_date",
-    "total_size",
-    "seeders",
-    "leechers",
-    "info_hash",
-    "magnet_link",
-]
-
 FEEDS = {
-    "releases.csv": {"format": "csv", "fields": _FEED_FIELDS},
-    "releases.json": {"format": "json", "fields": _FEED_FIELDS},
-    "releases.jsonl": {"format": "jsonlines", "fields": _FEED_FIELDS},
+    "releases.csv": {"format": "csv"},
+    "releases.json": {"format": "json"},
+    "releases.jsonl": {"format": "jsonlines"},
     "releases.rss": {"format": "rss"},
 }
 

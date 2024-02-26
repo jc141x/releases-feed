@@ -9,6 +9,9 @@ from itemadapter import ItemAdapter
 
 from scrapy.exceptions import DropItem
 
+# HTML Minifier
+import minify_html_onepass
+
 # Pony ORM for better DB handling syntax
 from pony.orm import *
 
@@ -21,37 +24,37 @@ class Jc141ReleaseDescriptionSanitizationPipeline:
 
     def process_item(self, item, spider):
         adapter = ItemAdapter(item)
-        desc = adapter.get("description", None)
-        if desc is None:
+        description = adapter.get("description", None)
+        if description is None:
             raise DropItem(f"No description in {item}")
         else:
             # Remove 1337x's placeholder spinner
-            desc = desc.replace('src="/images/profile-load.svg" ', "")
+            description = description.replace('src="/images/profile-load.svg" ', "")
 
             # Change attribute for image source
-            desc = desc.replace("data-original=", "src=")
+            description = description.replace("data-original=", "src=")
 
             # Switch to native lazy loading images
-            desc = desc.replace(
+            description = description.replace(
                 ' class="img-responsive descrimg lazy"', ' loading="lazy"'
             )
 
             # Strip unused attributes from the outer div tag
-            desc = desc.replace(
+            description = description.replace(
                 '<div role="tabpanel" class="tab-pane active" id="description">',
                 "<div>",
             )
 
             # Strip outer p tag
-            desc = desc.replace("<p>", "")
-            desc = desc.replace("</p>", "")
+            description = description.replace("<p>", "")
+            description = description.replace("</p>", "")
 
             # better a href attributes
-            desc = desc.replace(
+            description = description.replace(
                 'target="_blank"', 'target="_blank" rel="noopener noreferrer"'
             )
 
-            adapter["description"] = desc
+            adapter["description"] = minify_html_onepass.minify(description)
 
             return item
 

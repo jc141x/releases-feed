@@ -20,7 +20,7 @@ Fluent Reader is a bit better by providing the user the option to clean up old a
 ```
 https://github.com/jc141x/releases-feed/releases/download/feeds/releases.rss
 ```
-* JSON: (does not contain description)
+* JSON:
 ```
 https://github.com/jc141x/releases-feed/releases/download/feeds/releases.json
 ```
@@ -28,7 +28,7 @@ https://github.com/jc141x/releases-feed/releases/download/feeds/releases.json
 ```
 https://github.com/jc141x/releases-feed/releases/download/feeds/releases.jsonl
 ```
-* CSV: (does not contain description)
+* CSV:
 ```
 https://github.com/jc141x/releases-feed/releases/download/feeds/releases.csv
 ```
