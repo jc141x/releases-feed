@@ -77,9 +77,9 @@ jobs:
         id: utils
         run: |
           # Date
-          echo "date=$(date -u "+%Y%m%d%H%M%S")" >> $GITHUB_OUTPUT
+          DATE="$(date -u '+%Y%m%d%H%M%S')"; echo "date=$DATE" >> $GITHUB_OUTPUT
           # Number of releases
-          echo "releases=$(jq length "${{ github.workspace }}/releases.json")" >> $GITHUB_OUTPUT
+          RELEASES="$(jq length "${{ github.workspace }}/releases.json")" echo "releases=$RELEASES" >> $GITHUB_OUTPUT
         shell: bash
 
       - name: 🚀 Upload new release
