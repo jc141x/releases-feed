@@ -85,7 +85,8 @@ _FEED_FIELDS = [
 
 FEEDS = {
     "releases.csv": {"format": "csv", "fields": _FEED_FIELDS},
-    "releases.json": {"format": "jsonlines", "fields": _FEED_FIELDS},
+    "releases.json": {"format": "json", "fields": _FEED_FIELDS},
+    "releases.jsonl": {"format": "jsonlines", "fields": _FEED_FIELDS},
     "releases.rss": {"format": "rss"},
 }
 

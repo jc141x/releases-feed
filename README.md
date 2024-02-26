@@ -1,15 +1,13 @@
 <div align="center">
   <h1>Releases</h1>
+  <p>All our releases scraped into various machine readable files (CSV, JSON, RSS, etc..)</p>
 </div>
 
-<p align="center">
-  All our releases scraped into various machine readable files (CSV, JSON, RSS)
-</p>
-<br>
+<br/>
 
-### Recommended RSS client: [Fluent Reader](https://github.com/yang991178/fluent-reader)
-
- - The open externally button adds the torrents to your torrent client.
+### Recommended RSS clients:
+- [Fluent Reader](https://github.com/yang991178/fluent-reader) (Desktop)
+  - The open externally button adds the torrents to your torrent client.
 
 #### Keeping the reader up to date.
 
@@ -18,25 +16,31 @@ Previously we recommended Raven Reader but found out that it caches old articles
 Fluent Reader is a bit better by providing the user the option to clean up old articles in preferences. This enables users to use the search feature without finding duplicates. This action needs to be done manually so not quite ideal. We are looking for readers that handle this kind of requirements better.
 
 ## Links
-* RSS feed: (add this one to RSS clients)
+* RSS feed: (this one goes in your RSS reader apps)
 ```
 https://github.com/jc141x/releases-feed/releases/download/feeds/releases.rss
 ```
-* JSON:
+* JSON: (does not contain description)
 ```
 https://github.com/jc141x/releases-feed/releases/download/feeds/releases.json
 ```
-* CSV:
+* JSON Lines: (JSON, [but better?](https://jsonlines.org/))
+```
+https://github.com/jc141x/releases-feed/releases/download/feeds/releases.jsonl
+```
+* CSV: (does not contain description)
 ```
 https://github.com/jc141x/releases-feed/releases/download/feeds/releases.csv
 ```
-* SQLite DB: (this is an archive and may contain deprecated data)
+* SQLite DB: (used for archival purposes, contains superseded releases)
 ```
 https://github.com/jc141x/releases-feed/releases/download/feeds/releases.sqlite
 ```
 
 ## Details
 
-* an Actions cronjob will run the script and upload the feeds to the ["Releases"](https://github.com/jc141x/releases-feed/releases/latest) every 8 hours.
+* an Actions cronjob will run the script and upload the feeds to the ["Releases"][releases] every 8 hours.
 
-* In case 1337x.to goes down or scraping fails, you can check the latest ["Releases"](https://github.com/jc141x/releases-feed/releases/latest) for working files.
+* In case 1337x.to goes down or scraping fails, you can check the latest ["Releases"][releases] for working files.
+
+[releases]: https://github.com/jc141x/releases-feed/releases/latest

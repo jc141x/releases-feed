@@ -58,6 +58,7 @@ jobs:
         run: |
             [ -s "${{ github.workspace }}/releases.csv" ] && echo "🎉 CSV file generated successfully!" || exit 1
             [ -s "${{ github.workspace }}/releases.json" ] && echo "🎉 JSON file generated successfully!" || exit 1
+            [ -s "${{ github.workspace }}/releases.jsonl" ] && echo "🎉 JSONLines file generated successfully!" || exit 1
             [ -s "${{ github.workspace }}/releases.rss" ] && echo "🎉 RSS Feed generated successfully!" || exit 1
             [ -s "${{ github.workspace }}/releases.sqlite" ] && echo "🎉 SQLite DB updated successfully!" || exit 1
         shell: bash
@@ -95,6 +96,7 @@ jobs:
           files: |
             ${{ github.workspace }}/releases.csv
             ${{ github.workspace }}/releases.json
+            ${{ github.workspace }}/releases.jsonl
             ${{ github.workspace }}/releases.rss
             ${{ github.workspace }}/releases.sqlite
           draft: false
