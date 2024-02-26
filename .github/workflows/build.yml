@@ -33,23 +33,37 @@ jobs:
             pproxy -r 'socks5://127.0.0.1:9050' -l http://127.0.0.1:9051 --daemon || exit 1
         shell: bash
 
+      - name: 🍱 Restore SQLite Database from cache
+        uses: actions/cache/restore@v4
+        with:
+          path: releases.sqlite
+          key: jc141_releases_db
+
       - name: 🕸️ Run crawler
         run: |
-            scrapy crawl releases --logfile=releases.log
+            scrapy crawl releases -L WARNING --logfile=releases.log
+        shell: bash
+
+      - name: 🥡 Save SQLite Database to Cache
+        uses: actions/cache/save@v4
+        with:
+          path: releases.sqlite
+          key: jc141_releases_db
+
+      - name: ✅ Validate stuff
+        run: |
+            [ -s "${{ github.workspace }}/releases.csv" ] && echo "🎉 CSV file generated successfully!" || exit 1
+            [ -s "${{ github.workspace }}/releases.json" ] && echo "🎉 JSON file generated successfully!" || exit 1
+            [ -s "${{ github.workspace }}/releases.rss" ] && echo "🎉 RSS Feed generated successfully!" || exit 1
+            [ -s "${{ github.workspace }}/releases.sqlite" ] && echo "🎉 SQLite DB updated successfully!" || exit 1
         shell: bash
 
       - name: 🗒️ Upload log
+        if: failure()
         uses: actions/upload-artifact@v3
         with:
           name: releases.log
           path: ${{ github.workspace }}/releases.log
-
-      - name: ✅ Validate stuff
-        run: |
-            [ -s "${{ github.workspace }}/releases.json" ] && echo "🎉 Releases JSON generated successfully!" || exit 1
-            [ -s "${{ github.workspace }}/releases.csv" ] && echo "🎉 Releases CSV generated successfully!" || exit 1
-            [ -s "${{ github.workspace }}/releases.rss" ] && echo "🎉 RSS Feed generated successfully!" || exit 1
-        shell: bash
 
       - name: 🚮 Delete older releases
         uses: dev-drprasad/delete-older-releases@v0.2.0
@@ -63,9 +77,9 @@ jobs:
         id: utils
         run: |
           # Date
-          echo "::set-output name=date::$(date -u "+%Y%m%d%H%M%S")"
+          echo "date=$(date -u "+%Y%m%d%H%M%S")" >> $GITHUB_OUTPUT
           # Number of releases
-          echo "::set-output name=releases::$(jq length "${{ github.workspace }}/releases.json")"
+          echo "releases=$(jq length "${{ github.workspace }}/releases.json")" >> $GITHUB_OUTPUT
         shell: bash
 
       - name: 🚀 Upload new release
@@ -75,8 +89,9 @@ jobs:
           name: ${{ steps.utils.outputs.date }}
           body: Number of releases - ${{ steps.utils.outputs.releases }}
           files: |
-            ${{ github.workspace }}/releases.json
             ${{ github.workspace }}/releases.csv
+            ${{ github.workspace }}/releases.json
             ${{ github.workspace }}/releases.rss
+            ${{ github.workspace }}/releases.sqlite
           draft: false
           prerelease: false

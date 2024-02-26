@@ -1,9 +1,10 @@
 import scrapy
-from datetime import datetime
 from scrapy.exporters import XmlItemExporter
 
+from datetime import datetime
 
-class Johncena141ReleasesRSSExporter(XmlItemExporter):
+
+class Jc141ReleasesRSSExporter(XmlItemExporter):
     def __init__(self, *args, **kwargs):
         kwargs["root_element"] = "rss"
         kwargs["item_element"] = "item"
@@ -17,7 +18,7 @@ class Johncena141ReleasesRSSExporter(XmlItemExporter):
         self.language = "en-us"
         self.build_date = now
 
-        super(Johncena141ReleasesRSSExporter, self).__init__(*args, **kwargs)
+        super(Jc141ReleasesRSSExporter, self).__init__(*args, **kwargs)
 
     def start_exporting(self):
         self.xg.startDocument()
@@ -48,7 +49,7 @@ class Johncena141ReleasesRSSExporter(XmlItemExporter):
         self._export_xml_field("link", item.get("magnet"), depth=3)
         self._export_xml_field("description", item.get("description"), depth=3)
         self._export_xml_field("pubDate", item.get("date"), depth=3)
-        self._export_xml_field("guid", item.get("url"), depth=3)
+        self._export_xml_field("guid", item.get("info_hash"), depth=3)
 
         self._beautify_indent(depth=2)
         self.xg.endElement(self.item_element)

@@ -9,7 +9,7 @@ from scrapy import signals
 from itemadapter import is_item, ItemAdapter
 
 
-class Johncena141ReleasesSpiderMiddleware:
+class Jc141ReleasesSpiderMiddleware:
     # Not all methods need to be defined. If a method is not defined,
     # scrapy acts as if the spider middleware does not modify the
     # passed objects.
@@ -56,7 +56,7 @@ class Johncena141ReleasesSpiderMiddleware:
         spider.logger.info("Spider opened: %s" % spider.name)
 
 
-class Johncena141ReleasesDownloaderMiddleware:
+class Jc141ReleasesDownloaderMiddleware:
     # Not all methods need to be defined. If a method is not defined,
     # scrapy acts as if the downloader middleware does not modify the
     # passed objects.
@@ -78,7 +78,7 @@ class Johncena141ReleasesDownloaderMiddleware:
         # - or return a Request object
         # - or raise IgnoreRequest: process_exception() methods of
         #   installed downloader middleware will be called
-        request.meta['proxy'] = "http://127.0.0.1:9051"
+        request.meta["proxy"] = "http://127.0.0.1:9051"
 
     def process_response(self, request, response, spider):
         # Called with the response returned from the downloader.

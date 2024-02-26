@@ -182,3 +182,6 @@ releases.log
 releases.csv
 releases.json
 releases.rss
+
+# Local DB
+releases.sqlite

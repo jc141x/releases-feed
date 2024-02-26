@@ -1,7 +1,10 @@
+# Scraping Stuff
 scrapy
-scrapy-fake-useragent
 dateparser
 
 # Tor Proxy
 pproxy
 python-daemon
+
+# SQLite DB
+pony

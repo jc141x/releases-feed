@@ -30,6 +30,10 @@ https://github.com/jc141x/releases-feed/releases/download/feeds/releases.json
 ```
 https://github.com/jc141x/releases-feed/releases/download/feeds/releases.csv
 ```
+* SQLite DB: (this is an archive and may contain deprecated data)
+```
+https://github.com/jc141x/releases-feed/releases/download/feeds/releases.sqlite
+```
 
 ## Details
 

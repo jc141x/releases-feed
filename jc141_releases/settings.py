@@ -1,4 +1,4 @@
-# Scrapy settings for johncena141_releases project
+# Scrapy settings for jc141_releases project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -7,20 +7,14 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = "johncena141_releases"
+BOT_NAME = "jc141_releases"
 
-SPIDER_MODULES = ["johncena141_releases.spiders"]
-NEWSPIDER_MODULE = "johncena141_releases.spiders"
+SPIDER_MODULES = ["jc141_releases.spiders"]
+NEWSPIDER_MODULE = "jc141_releases.spiders"
 
-# Enable fake user agent provider
-FAKEUSERAGENT_PROVIDERS = [
-    'scrapy_fake_useragent.providers.FakeUserAgentProvider',  # this is the first provider we'll try
-    'scrapy_fake_useragent.providers.FakerProvider',  # if FakeUserAgentProvider fails, we'll use faker to generate a user-agent string for us
-    'scrapy_fake_useragent.providers.FixedUserAgentProvider',  # fall back to USER_AGENT value
-]
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64)'
+USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; rv:109.0) Gecko/20100101 Firefox/115.0"
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
@@ -44,72 +38,56 @@ TELNETCONSOLE_ENABLED = False
 
 # Override the default request headers:
 # DEFAULT_REQUEST_HEADERS = {
-#   'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-#   'Accept-Language': 'en',
+#    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+#    "Accept-Language": "en",
 # }
 
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 # SPIDER_MIDDLEWARES = {
-#    'johncena141_releases.middlewares.Johncena141ReleasesSpiderMiddleware': 543,
+#    "jc141_releases.middlewares.Jc141ReleasesSpiderMiddleware": 543,
 # }
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
-   'johncena141_releases.middlewares.Johncena141ReleasesDownloaderMiddleware': 543,
+    "jc141_releases.middlewares.Jc141ReleasesDownloaderMiddleware": 543,
 }
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
 # EXTENSIONS = {
-#    'scrapy.extensions.telnet.TelnetConsole': None,
+#    "scrapy.extensions.telnet.TelnetConsole": None,
 # }
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-# ITEM_PIPELINES = {
-#    'johncena141_releases.pipelines.Johncena141ReleasesPipeline': 300,
-# }
-
-FEED_EXPORTERS = {
-    "rss": "johncena141_releases.exporters.Johncena141ReleasesRSSExporter"
+ITEM_PIPELINES = {
+    "jc141_releases.pipelines.Jc141ReleaseDescriptionSanitizationPipeline": 100,
+    "jc141_releases.pipelines.Jc141ReleaseSQLitePipeline": 300,
 }
+
+FEED_EXPORTERS = {"rss": "jc141_releases.exporters.Jc141ReleasesRSSExporter"}
+
+# Default set of fields for the feeds
+_FEED_FIELDS = [
+    "torrent_id",
+    "name",
+    "url",
+    "upload_date",
+    "checked_date",
+    "total_size",
+    "seeders",
+    "leechers",
+    "info_hash",
+    "magnet_link",
+]
 
 FEEDS = {
-    "releases.json": {
-        "format": "json",
-        "encoding": "utf8",
-        "fields": [
-            "id",
-            "name",
-            "url",
-            "magnet",
-            "date",
-            "size",
-            "seeds",
-            "leeches",
-            "hash",
-        ],
-    },
-    "releases.csv": {
-        "format": "csv",
-        "encoding": "utf8",
-        "fields": [
-            "id",
-            "name",
-            "url",
-            "magnet",
-            "date",
-            "size",
-            "seeds",
-            "leeches",
-            "hash",
-        ],
-    },
-    "releases.rss": {"format": "rss", "encoding": "utf8"},
+    "releases.csv": {"format": "csv", "fields": _FEED_FIELDS},
+    "releases.json": {"format": "jsonlines", "fields": _FEED_FIELDS},
+    "releases.rss": {"format": "rss"},
 }
-
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
@@ -127,6 +105,12 @@ AUTOTHROTTLE_ENABLED = True
 # Enable and configure HTTP caching (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html#httpcache-middleware-settings
 # HTTPCACHE_ENABLED = True
-# HTTPCACHE_DIR = 'httpcache'
+# HTTPCACHE_EXPIRATION_SECS = 0
+# HTTPCACHE_DIR = "httpcache"
 # HTTPCACHE_IGNORE_HTTP_CODES = []
-# HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+# HTTPCACHE_STORAGE = "scrapy.extensions.httpcache.FilesystemCacheStorage"
+
+# Set settings whose default value is deprecated to a future-proof value
+REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
+TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
+FEED_EXPORT_ENCODING = "utf-8"
