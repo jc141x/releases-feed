@@ -1,5 +1,10 @@
 # Scraping Stuff
 scrapy
+
+# Random User-Agents
+scrapy-fake-useragent
+
+# Handle dates
 dateparser
 
 # HTML minifier

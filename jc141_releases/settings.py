@@ -12,6 +12,15 @@ BOT_NAME = "jc141_releases"
 SPIDER_MODULES = ["jc141_releases.spiders"]
 NEWSPIDER_MODULE = "jc141_releases.spiders"
 
+# scrapy-fake-useragent
+FAKEUSERAGENT_PROVIDERS = [
+    'scrapy_fake_useragent.providers.FakeUserAgentProvider',
+    'scrapy_fake_useragent.providers.FakerProvider',
+    'scrapy_fake_useragent.providers.FixedUserAgentProvider',
+]
+
+# filter fake useragents to use a specific type
+FAKE_USERAGENT_RANDOM_UA_TYPE = "firefox"
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; rv:109.0) Gecko/20100101 Firefox/115.0"
