@@ -1,7 +1,7 @@
 import scrapy
 from scrapy.exporters import XmlItemExporter
 
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 class Jc141ReleasesRSSExporter(XmlItemExporter):
@@ -11,7 +11,7 @@ class Jc141ReleasesRSSExporter(XmlItemExporter):
         self.channel_element = "channel"
         self.item_element = "item"
 
-        now = datetime.utcnow().strftime("%a, %d %b %Y %H:%M:%S %z")
+        now = datetime.now(timezone.utc).strftime("%a, %d %b %Y %H:%M:%S %Z")
         self.title = "johncena141 releases"
         self.link = "https://www.1337x.to/user/johncena141"
         self.description = "johncena141 RSS feed"
@@ -48,7 +48,7 @@ class Jc141ReleasesRSSExporter(XmlItemExporter):
         self._export_xml_field("title", item.get("name"), depth=3)
         self._export_xml_field("link", item.get("magnet"), depth=3)
         self._export_xml_field("description", item.get("description"), depth=3)
-        self._export_xml_field("pubDate", item.get("date"), depth=3)
+        self._export_xml_field("pubDate", item.get("upload_date"), depth=3)
         self._export_xml_field("guid", item.get("info_hash"), depth=3)
 
         self._beautify_indent(depth=2)

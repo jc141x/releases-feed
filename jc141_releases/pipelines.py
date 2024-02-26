@@ -85,8 +85,8 @@ class Jc141ReleaseSQLitePipeline:
         db.generate_mapping(create_tables=True)
 
         # keeping datetime formats handy
-        datetime_format1 = "%a, %d %b %Y %H:%M:%S %z"
-        datetime_format2 = "%Y-%m-%d %H:%M:%S%z"
+        rss_datetime_format = "%a, %d %b %Y %H:%M:%S %Z"
+        sqlite_datetime_format = "%Y-%m-%d %H:%M:%S%z"
 
         # Meat and Potatoes
         with db_session:
@@ -97,10 +97,10 @@ class Jc141ReleaseSQLitePipeline:
                     name=adapter.get("name"),
                     url=adapter.get("url"),
                     upload_date=datetime.strptime(
-                        adapter.get("upload_date"), datetime_format1
+                        adapter.get("upload_date"), rss_datetime_format
                     ),
                     checked_date=datetime.strptime(
-                        adapter.get("checked_date"), datetime_format1
+                        adapter.get("checked_date"), rss_datetime_format
                     ),
                     description=adapter.get("description"),
                     total_size=adapter.get("total_size"),
@@ -113,10 +113,10 @@ class Jc141ReleaseSQLitePipeline:
                 # Existing release, make sure the upload date does not change
                 existing_release = Jc141ReleaseDBEntity[adapter.get("torrent_id")]
                 if datetime.strptime(
-                    existing_release.upload_date, datetime_format2
-                ) <= datetime.strptime(adapter.get("upload_date"), datetime_format1):
+                    existing_release.upload_date, sqlite_datetime_format
+                ) <= datetime.strptime(adapter.get("upload_date"), rss_datetime_format):
                     adapter["upload_date"] = datetime.strptime(
-                        existing_release.upload_date, datetime_format2
-                    ).strftime(datetime_format1)
+                        existing_release.upload_date, sqlite_datetime_format
+                    ).strftime(rss_datetime_format)
 
         return item
