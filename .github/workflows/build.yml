@@ -40,8 +40,8 @@ jobs:
       - name: 🍱 Restore SQLite Database from cache
         uses: actions/cache/restore@v4
         with:
-          path: releases.sqlite
-          key: jc141_releases_db
+          path: releases.db
+          key: releases_db
 
       - name: 🕸️ Run crawler
         run: |
@@ -51,8 +51,8 @@ jobs:
       - name: 🥡 Save SQLite Database to Cache
         uses: actions/cache/save@v4
         with:
-          path: releases.sqlite
-          key: jc141_releases_db
+          path: releases.db
+          key: releases_db
 
       - name: ✅ Validate stuff
         run: |
@@ -60,7 +60,7 @@ jobs:
             [ -s "${{ github.workspace }}/releases.json" ] && echo "🎉 JSON file generated successfully!" || exit 1
             [ -s "${{ github.workspace }}/releases.jsonl" ] && echo "🎉 JSONLines file generated successfully!" || exit 1
             [ -s "${{ github.workspace }}/releases.rss" ] && echo "🎉 RSS Feed generated successfully!" || exit 1
-            [ -s "${{ github.workspace }}/releases.sqlite" ] && echo "🎉 SQLite DB updated successfully!" || exit 1
+            [ -s "${{ github.workspace }}/releases.db" ] && echo "🎉 SQLite DB updated successfully!" || exit 1
         shell: bash
 
       - name: 🗒️ Upload log
@@ -82,22 +82,26 @@ jobs:
         id: utils
         run: |
           # Date
-          DATE="$(date -u '+%Y%m%d%H%M%S')"; echo "date=$DATE" >> $GITHUB_OUTPUT
+          DATE="$(date -u '+%Y%m%d%H%M%S')"
+          echo "date=$DATE" >> $GITHUB_OUTPUT
+
           # Number of releases
-          RELEASES="$(jq length "${{ github.workspace }}/releases.json")" echo "releases=$RELEASES" >> $GITHUB_OUTPUT
+          RELEASES="$(jq length "${{ github.workspace }}/releases.json")"
+          echo "releases=$RELEASES" >> $GITHUB_OUTPUT
         shell: bash
 
       - name: 🚀 Upload new release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: feeds
+          tag_name: feeds-${{ steps.utils.outputs.date }}
           name: ${{ steps.utils.outputs.date }}
-          body: Number of releases - ${{ steps.utils.outputs.releases }}
+          body: |
+            Number of releases - ${{ steps.utils.outputs.releases }}
           files: |
             ${{ github.workspace }}/releases.csv
             ${{ github.workspace }}/releases.json
             ${{ github.workspace }}/releases.jsonl
             ${{ github.workspace }}/releases.rss
-            ${{ github.workspace }}/releases.sqlite
+            ${{ github.workspace }}/releases.db
           draft: false
           prerelease: false

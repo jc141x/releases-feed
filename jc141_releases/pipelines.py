@@ -10,9 +10,10 @@ from itemadapter import ItemAdapter
 from scrapy.exceptions import DropItem
 
 # HTML Minifier
-import minify_html_onepass
+import minify_html
 
 # Pony ORM for better DB handling syntax
+from pony.converting import str2datetime
 from pony.orm import *
 
 # Date and Time Handling
@@ -34,9 +35,10 @@ class Jc141ReleaseDescriptionSanitizationPipeline:
             # Change attribute for image source
             description = description.replace("data-original=", "src=")
 
-            # Switch to native lazy loading images
+            # Switch to native lazy loading images, also make it responsive
             description = description.replace(
-                ' class="img-responsive descrimg lazy"', ' loading="lazy"'
+                ' class="img-responsive descrimg lazy"',
+                ' style="width: 100%; height: auto" loading="lazy"',
             )
 
             # Strip unused attributes from the outer div tag
@@ -54,7 +56,9 @@ class Jc141ReleaseDescriptionSanitizationPipeline:
                 'target="_blank"', 'target="_blank" rel="noopener noreferrer"'
             )
 
-            adapter["description"] = minify_html_onepass.minify(description)
+            adapter["description"] = minify_html.minify(
+                description, remove_processing_instructions=True
+            )
 
             return item
 
@@ -67,10 +71,9 @@ class Jc141ReleaseSQLitePipeline:
 
         # Initializing SQLite DB and ORM
         db = Database()
-        db.bind(provider="sqlite", filename="../releases.sqlite", create_db=True)
+        db.bind(provider="sqlite", filename="../releases.db", create_db=True)
 
         # Releases "schema" for SQLite db
-        # Make sure this matches the "Jc141ReleaseItem" class in items.py
         class Jc141ReleaseDBEntity(db.Entity):
             torrent_id = PrimaryKey(int)
             name = Required(str)
@@ -88,22 +91,22 @@ class Jc141ReleaseSQLitePipeline:
         db.generate_mapping(create_tables=True)
 
         # keeping datetime formats handy
-        rss_datetime_format = "%a, %d %b %Y %H:%M:%S %Z"
-        sqlite_datetime_format = "%Y-%m-%d %H:%M:%S%z"
+        datetime_format_rss = "%a, %d %b %Y %H:%M:%S%z"
+        datetime_format_sqlite = "%Y-%m-%d %H:%M:%S%z"
 
         # Meat and Potatoes
         with db_session:
-            # New release, add directly to DB
             if not Jc141ReleaseDBEntity.exists(torrent_id=adapter.get("torrent_id")):
+                # New release, add directly to DB
                 new_release = Jc141ReleaseDBEntity(
                     torrent_id=adapter.get("torrent_id"),
                     name=adapter.get("name"),
                     url=adapter.get("url"),
                     upload_date=datetime.strptime(
-                        adapter.get("upload_date"), rss_datetime_format
+                        adapter.get("upload_date"), datetime_format_rss
                     ),
                     checked_date=datetime.strptime(
-                        adapter.get("checked_date"), rss_datetime_format
+                        adapter.get("checked_date"), datetime_format_rss
                     ),
                     description=adapter.get("description"),
                     total_size=adapter.get("total_size"),
@@ -113,13 +116,42 @@ class Jc141ReleaseSQLitePipeline:
                     magnet_link=adapter.get("magnet_link"),
                 )
             else:
-                # Existing release, make sure the upload date does not change
+                # Existing release, make sure the upload date does not drift
+                # ... unless there's a change in the description or title (edge case)
                 existing_release = Jc141ReleaseDBEntity[adapter.get("torrent_id")]
-                if datetime.strptime(
-                    existing_release.upload_date, sqlite_datetime_format
-                ) <= datetime.strptime(adapter.get("upload_date"), rss_datetime_format):
-                    adapter["upload_date"] = datetime.strptime(
-                        existing_release.upload_date, sqlite_datetime_format
-                    ).strftime(rss_datetime_format)
 
+                # Update the "last checked" value in the DB
+                existing_release.set(
+                    checked_date=datetime.strptime(
+                        adapter.get("checked_date"), datetime_format_rss
+                    )
+                )
+
+                # Update the "seeders" and "leechers" value in the DB
+                existing_release.set(
+                    seeders=adapter.get("seeders"),
+                    leechers=adapter.get("leechers"),
+                )
+
+                if (existing_release.name != adapter.get("name")) or (
+                    existing_release.description != adapter.get("description")
+                ):
+                    # Update the changes in the DB
+                    existing_release.set(
+                        name=adapter.get("name"),
+                        url=adapter.get("url"),  # URL Changes with Name?
+                        upload_date=datetime.strptime(
+                            adapter.get("upload_date"), datetime_format_rss
+                        ),
+                        description=adapter.get("description"),
+                    )
+                else:
+                    if datetime.strptime(
+                        existing_release.upload_date, datetime_format_sqlite
+                    ) <= datetime.strptime(
+                        adapter.get("upload_date"), datetime_format_rss
+                    ):
+                        adapter["upload_date"] = datetime.strptime(
+                            existing_release.upload_date, datetime_format_sqlite
+                        ).strftime(datetime_format_rss)
         return item

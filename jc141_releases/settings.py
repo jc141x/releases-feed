@@ -14,9 +14,9 @@ NEWSPIDER_MODULE = "jc141_releases.spiders"
 
 # scrapy-fake-useragent
 FAKEUSERAGENT_PROVIDERS = [
-    'scrapy_fake_useragent.providers.FakeUserAgentProvider',
-    'scrapy_fake_useragent.providers.FakerProvider',
-    'scrapy_fake_useragent.providers.FixedUserAgentProvider',
+    "scrapy_fake_useragent.providers.FakeUserAgentProvider",
+    "scrapy_fake_useragent.providers.FakerProvider",
+    "scrapy_fake_useragent.providers.FixedUserAgentProvider",
 ]
 
 # filter fake useragents to use a specific type

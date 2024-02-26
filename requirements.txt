@@ -8,7 +8,7 @@ scrapy-fake-useragent
 dateparser
 
 # HTML minifier
-minify-html-onepass
+minify-html
 
 # Tor Proxy
 pproxy

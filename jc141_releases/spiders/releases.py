@@ -9,7 +9,6 @@ class ReleasesSpider(scrapy.Spider):
     name = "releases"
     allowed_domains = ["l337xdarkkaqfwzntnfk5bmoaroivtl6xsbatabvlb52umg6v3ch44yd.onion"]
     start_urls = [f"http://{allowed_domains[0]}/user/{uploader_username}/"]
-    current_page = 1  # 1337x works in strange ways..
 
     def parse(self, response):
         """Main parser"""
@@ -19,24 +18,17 @@ class ReleasesSpider(scrapy.Spider):
             response.css(".last > a:nth-child(1)::attr(href)").get().split("/")[-2]
         )
 
-        # HACK: Manually set total page number, for dev
-        # last_page = 1
-
-        while self.current_page <= last_page:
+        for page in range(1, last_page + 1):
             yield response.follow(
-                f"/{uploader_username}-torrents/{self.current_page}/",
+                f"/{uploader_username}-torrents/{page}/",
                 callback=self.parse_list,
             )
-            self.current_page += 1  # update page number
 
     def parse_list(self, response):
         """Parses list of torrents on the page"""
 
-        self.current_page = int(response.url.split("/")[-2])
         torrents = response.css("td.coll-1.name a:nth-child(2)::attr(href)").getall()
-        for item in reversed(
-            torrents
-        ):  # for some reason, we need to have this reversed to work as intended
+        for item in torrents:
             yield response.follow(item, callback=self.parse_torrent)
 
     def parse_torrent(self, response):

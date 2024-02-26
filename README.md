@@ -18,23 +18,23 @@ Fluent Reader is a bit better by providing the user the option to clean up old a
 ## Links
 * RSS feed: (this one goes in your RSS reader apps)
 ```
-https://github.com/jc141x/releases-feed/releases/download/feeds/releases.rss
+https://github.com/jc141x/releases-feed/releases/latest/download/releases.rss
 ```
 * JSON:
 ```
-https://github.com/jc141x/releases-feed/releases/download/feeds/releases.json
+https://github.com/jc141x/releases-feed/releases/latest/download/releases.json
 ```
 * JSON Lines: (JSON, [but better?](https://jsonlines.org/))
 ```
-https://github.com/jc141x/releases-feed/releases/download/feeds/releases.jsonl
+https://github.com/jc141x/releases-feed/releases/latest/download/releases.jsonl
 ```
 * CSV:
 ```
-https://github.com/jc141x/releases-feed/releases/download/feeds/releases.csv
+https://github.com/jc141x/releases-feed/releases/latest/download/releases.csv
 ```
 * SQLite DB: (used for archival purposes, contains superseded releases)
 ```
-https://github.com/jc141x/releases-feed/releases/download/feeds/releases.sqlite
+https://github.com/jc141x/releases-feed/releases/latest/download/releases.sqlite
 ```
 
 ## Details
