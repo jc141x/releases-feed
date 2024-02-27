@@ -46,7 +46,7 @@ class Jc141ReleasesRSSExporter(XmlItemExporter):
         self._beautify_newline()
 
         self._export_xml_field("title", item.get("name"), depth=3)
-        self._export_xml_field("link", item.get("magnet"), depth=3)
+        self._export_xml_field("link", item.get("magnet_link"), depth=3)
         self._export_xml_field("description", item.get("description"), depth=3)
         self._export_xml_field("pubDate", item.get("upload_date"), depth=3)
         self._export_xml_field("guid", item.get("info_hash"), depth=3)
