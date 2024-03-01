@@ -35,10 +35,13 @@ class Jc141ReleaseDescriptionSanitizationPipeline:
             # Change attribute for image source
             description = description.replace("data-original=", "src=")
 
+            # Strip away the weird spaces stuff
+            description = description.replace("                      ", "")
+
             # Switch to native lazy loading images, also make it responsive
             description = description.replace(
-                ' class="img-responsive descrimg lazy"',
-                ' style="width: 100%; height: auto" loading="lazy"',
+                'class="img-responsive descrimg lazy"',
+                'loading="lazy" style="width: 100%; height: auto"',
             )
 
             # Strip unused attributes from the outer div tag
@@ -57,7 +60,10 @@ class Jc141ReleaseDescriptionSanitizationPipeline:
             )
 
             adapter["description"] = minify_html.minify(
-                description, remove_processing_instructions=True
+                description,
+                minify_css=True,
+                keep_spaces_between_attributes=True,
+                remove_processing_instructions=True,
             )
 
             return item

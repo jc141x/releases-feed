@@ -28,7 +28,9 @@ class ReleasesSpider(scrapy.Spider):
         """Parses list of torrents on the page"""
 
         torrents = response.css("td.coll-1.name a:nth-child(2)::attr(href)").getall()
-        for item in torrents:
+
+        # reverse sort the torrents
+        for item in reversed(torrents):
             yield response.follow(item, callback=self.parse_torrent)
 
     def parse_torrent(self, response):
