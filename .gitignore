@@ -181,6 +181,7 @@ releases.log
 # Local builds
 releases.csv
 releases.json
+releases.jsonl
 releases.rss
 
 # Local DB

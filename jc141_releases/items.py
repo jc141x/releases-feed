@@ -20,7 +20,7 @@ class Jc141ReleaseLoader(ItemLoader):
         parsed_date = dateparser.parse(
             date, settings={"TO_TIMEZONE": "UTC", "RETURN_AS_TIMEZONE_AWARE": True}
         )
-        date_string = parsed_date.strftime("%a, %d %b %Y %H:%M:%S%z")
+        date_string = parsed_date.strftime("%a, %d %b %Y %H:%M:%S %z")
         return date_string
 
     default_input_processor = MapCompose(str.strip)

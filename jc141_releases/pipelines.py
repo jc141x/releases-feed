@@ -97,7 +97,7 @@ class Jc141ReleaseSQLitePipeline:
         db.generate_mapping(create_tables=True)
 
         # keeping datetime formats handy
-        datetime_format_rss = "%a, %d %b %Y %H:%M:%S%z"
+        datetime_format_rss = "%a, %d %b %Y %H:%M:%S %z"
         datetime_format_sqlite = "%Y-%m-%d %H:%M:%S%z"
 
         # Meat and Potatoes

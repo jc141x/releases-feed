@@ -11,7 +11,7 @@ class Jc141ReleasesRSSExporter(XmlItemExporter):
         self.channel_element = "channel"
         self.item_element = "item"
 
-        now = datetime.now(timezone.utc).strftime("%a, %d %b %Y %H:%M:%S%z")
+        now = datetime.now(timezone.utc).strftime("%a, %d %b %Y %H:%M:%S %z")
         self.title = "johncena141 releases"
         self.link = "https://www.1337x.to/user/johncena141"
         self.description = "johncena141 RSS feed"
